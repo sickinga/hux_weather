@@ -18,9 +18,7 @@ export function useCitySearch(searchTerm: Ref<string>) {
         queryFn: () => fetchCities(toValue(searchTerm)),
     });
 
-    watch(searchTerm, () => {
-        query.refetch();
-    });
+    watch(searchTerm, () => query.refetch());
 
     return query;
 }
