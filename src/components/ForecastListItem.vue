@@ -3,7 +3,9 @@ import { defineProps } from "vue";
 import { formatDate } from '../utils/dateUtils.ts'
 
 const props = defineProps({
-    data: Object
+    data: Object,
+    tempUnit: String,
+    tempUnitPostfix: String
 })
 </script>
 
@@ -13,8 +15,10 @@ const props = defineProps({
             <div>{{ formatDate(props.data?.date) }}</div>
             <div><img class="forecast-icon" :src="props.data?.day.condition.icon" :alt="props.data?.day.condition.text" />
             </div>
-            <div><span class="max-color">{{ props.data?.day.maxtemp_c.toFixed(1) }} °C</span> | <span class="min-color">{{
-                props.data?.day.mintemp_c.toFixed(1) }} °C</span></div>
+            <div><span class="max-color">{{ props.data?.day["maxtemp" + props.tempUnitPostfix].toFixed(1) }} {{
+                props.tempUnit
+            }}</span> | <span class="min-color">{{
+    props.data?.day["mintemp" + props.tempUnitPostfix].toFixed(1) }} {{ props.tempUnit }}</span></div>
         </div>
 
     </b-list-group-item>

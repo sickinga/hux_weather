@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps } from "vue";
+import { defineProps, watch, ref } from "vue";
 import { useQuery } from '@tanstack/vue-query'
 
 import { AllWeatherData } from '@/types/weatherTypes';
@@ -8,7 +8,14 @@ import ForecastListItem from "./ForecastListItem.vue";
 const props = defineProps({
     lat: String,
     lng: String,
-    locationName: String
+    locationName: String,
+    tempUnit: String
+})
+
+const tempUnit = ref<string>("°C")
+
+watch(() => props.tempUnit, () => {
+    tempUnit.value = props.tempUnit === '_f' ? "°F" : "°C"
 })
 
 const fetchWeatherData = async (): Promise<AllWeatherData> => {
@@ -35,7 +42,8 @@ const { isPending, isError, data } = useQuery({
             <b-container class="grid-container">
                 <b-row class="text-center" align-v="center">
                     <b-col class="current-temp">
-                        {{ data.current.temp_c }} °C
+                        <!-- FIXME: fix TS error -->
+                        {{ data.current["temp" + props.tempUnit] }} {{ tempUnit }}
                     </b-col>
                     <b-col><img class="current-icon" :src="data.current.condition.icon"
                             :alt="data.current.condition.text" />
@@ -43,14 +51,15 @@ const { isPending, isError, data } = useQuery({
                 </b-row>
                 <b-row>
                     <b-col>
-                        Feels like: {{ data.current.feelslike_c }} °C
+                        Feels like: {{ data.current["feelslike" + props.tempUnit] }} {{ tempUnit }}
                     </b-col>
                     <b-col>{{
                         data.current.condition.text }}</b-col>
                 </b-row>
                 <b-row>
                     <b-list-group v-for="d in data.forecast.forecastday" v-bind:key="d.date" class="forecast-list">
-                        <forecast-list-item :data="d"></forecast-list-item>
+                        <forecast-list-item :data="d" :temp-unit="tempUnit"
+                            :temp-unit-postfix="props.tempUnit"></forecast-list-item>
                     </b-list-group>
                 </b-row>
                 <b-row>
