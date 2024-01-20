@@ -12,8 +12,7 @@ const props = defineProps({
 })
 
 const fetchWeatherData = async (): Promise<AllWeatherData> => {
-    const apiKey = "" // TODO
-    const url = `https://api.weatherapi.com/v1/forecast.json?q=${props.lat}%2C${props.lng}&days=3&lang=en&alerts=no&aqi=no&key=${apiKey}}`
+    const url = `https://api.weatherapi.com/v1/forecast.json?q=${props.lat}%2C${props.lng}&days=3&lang=en&alerts=no&aqi=no&key=${process.env.VUE_APP_WEATHER_API}`
 
     const response = await fetch(url)
     if (!response.ok) {
