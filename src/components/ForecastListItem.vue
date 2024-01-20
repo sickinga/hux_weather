@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { defineProps } from "vue";
-import { formatDate } from '../utils/DateUtils.ts'
+import { formatDate } from '../utils/dateUtils.ts'
 
 const props = defineProps({
     data: Object
 })
-console.log('leaf: data', props.data);
 </script>
 
 <template>
@@ -14,8 +13,8 @@ console.log('leaf: data', props.data);
             <div>{{ formatDate(props.data?.date) }}</div>
             <div><img class="forecast-icon" :src="props.data?.day.condition.icon" :alt="props.data?.day.condition.text" />
             </div>
-            <div><span class="max-color">{{ props.data?.day.maxtemp_c }} °C</span>/<span class="min-color">{{
-                props.data?.day.mintemp_c }} °C</span></div>
+            <div><span class="max-color">{{ props.data?.day.maxtemp_c.toFixed(1) }} °C</span> | <span class="min-color">{{
+                props.data?.day.mintemp_c.toFixed(1) }} °C</span></div>
         </div>
 
     </b-list-group-item>
@@ -48,4 +47,3 @@ console.log('leaf: data', props.data);
     padding-bottom: 0px;
 }
 </style>
-  

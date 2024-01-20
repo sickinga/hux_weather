@@ -8,4 +8,3 @@ export const formatDate = (inputDate: string): string => {
 
     return new Intl.DateTimeFormat("en-US", options).format(dateObject);
 };
-

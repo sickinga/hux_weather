@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { defineProps, ref } from "vue";
+import { defineProps } from "vue";
+import { useQuery } from '@tanstack/vue-query'
+
+import { AllWeatherData } from '@/types/weatherTypes';
 import ForecastListItem from "./ForecastListItem.vue";
 
 const props = defineProps({
@@ -8,51 +11,59 @@ const props = defineProps({
     locationName: String
 })
 
-const weatherData = ref<any>(null)
-const forecastData = ref<any>(null)
-const apiKey = "" // TODO
-const url = `https://api.weatherapi.com/v1/forecast.json?q=${props.lat}%2C${props.lng}&days=3&lang=en&alerts=yes&aqi=no&key={apiKey}`
-// TODO: api key and error handling
+const fetchWeatherData = async (): Promise<AllWeatherData> => {
+    const apiKey = "" // TODO
+    const url = `https://api.weatherapi.com/v1/forecast.json?q=${props.lat}%2C${props.lng}&days=3&lang=en&alerts=no&aqi=no&key=${apiKey}}`
 
-const result = await fetch(url)
-const weatherJson = await result.json()
+    const response = await fetch(url)
+    if (!response.ok) {
+        // https://github.com/TanStack/query/issues/2258
+        throw new Error('Network response was not ok')
+    }
+    return response.json()
+}
 
-weatherData.value = weatherJson.current;
-forecastData.value = weatherJson.forecast.forecastday;
-
+const { isPending, isError, data } = useQuery({
+    queryKey: ['weather'],
+    queryFn: fetchWeatherData,
+})
 </script>
 
 <template>
     <div class="weather-card">
         <h2>{{ props.locationName }}</h2>
-        <div class="weather-info" v-if="weatherData">
+        <div class="weather-info" v-if="data">
             <b-container class="grid-container">
                 <b-row class="text-center" align-v="center">
                     <b-col class="current-temp">
-                        {{ weatherData.temp_c }} °C
+                        {{ data.current.temp_c }} °C
                     </b-col>
-                    <b-col><img class="current-icon" :src="weatherData.condition.icon" :alt="weatherData.condition.text" />
+                    <b-col><img class="current-icon" :src="data.current.condition.icon"
+                            :alt="data.current.condition.text" />
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col>
-                        Feels like: {{ weatherData.feelslike_c }} °C
+                        Feels like: {{ data.current.feelslike_c }} °C
                     </b-col>
                     <b-col>{{
-                        weatherData.condition.text }}</b-col>
+                        data.current.condition.text }}</b-col>
                 </b-row>
                 <b-row>
-                    <b-list-group v-for="data in forecastData" v-bind:key="data.date" class="forecast-list">
-                        <forecast-list-item :data="data"></forecast-list-item>
+                    <b-list-group v-for="d in data.forecast.forecastday" v-bind:key="d.date" class="forecast-list">
+                        <forecast-list-item :data="d"></forecast-list-item>
                     </b-list-group>
                 </b-row>
                 <b-row>
-                    <div class="updated-text">Last updated at: {{ weatherData.last_updated }}</div>
+                    <div class="updated-text">Last updated at: {{ data.current.last_updated }}</div>
                 </b-row>
             </b-container>
         </div>
-        <div v-if="!weatherData">
+        <div v-else-if="isPending">
             <b-spinner label="Spinning"></b-spinner>
+        </div>
+        <div v-else-if="isError">
+            <p>Error fetching data</p>
         </div>
     </div>
 </template>
