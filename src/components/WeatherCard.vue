@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineProps, watch, ref } from "vue";
-import { useQuery } from '@tanstack/vue-query'
+import { useQuery } from '@tanstack/vue-query';
+import { TempUnit } from "@/types/weatherTypes";
 
 import { AllWeatherData } from '@/types/weatherTypes';
 import ForecastListItem from "./ForecastListItem.vue";
@@ -9,7 +10,7 @@ const props = defineProps({
     lat: String,
     lng: String,
     locationName: String,
-    tempUnit: String
+    tempUnit: String as () => TempUnit,
 })
 
 const tempUnit = ref<string>("°C")
@@ -33,6 +34,14 @@ const { isPending, isError, data } = useQuery({
     queryKey: ['weather'],
     queryFn: fetchWeatherData,
 })
+
+function getTempKey() {
+    return tempUnit.value === '_f' ? "temp_f" : "temp_c"
+}
+
+function getTempFeelsLikeKey() {
+    return tempUnit.value === '_f' ? "feelslike_f" : "feelslike_c"
+}
 </script>
 
 <template>
@@ -43,7 +52,7 @@ const { isPending, isError, data } = useQuery({
                 <b-row class="text-center" align-v="center">
                     <b-col class="current-temp">
                         <!-- FIXME: fix TS error -->
-                        {{ data.current["temp" + props.tempUnit] }} {{ tempUnit }}
+                        {{ data.current[getTempKey()] }} {{ tempUnit }}
                     </b-col>
                     <b-col><img class="current-icon" :src="data.current.condition.icon"
                             :alt="data.current.condition.text" />
@@ -51,7 +60,7 @@ const { isPending, isError, data } = useQuery({
                 </b-row>
                 <b-row>
                     <b-col>
-                        Feels like: {{ data.current["feelslike" + props.tempUnit] }} {{ tempUnit }}
+                        Feels like: {{ data.current[getTempFeelsLikeKey()] }} {{ tempUnit }}
                     </b-col>
                     <b-col>{{
                         data.current.condition.text }}</b-col>

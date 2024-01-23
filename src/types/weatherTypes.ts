@@ -129,3 +129,5 @@ export type AllWeatherData = {
     current: CurrentWeatherData;
     forecast: { forecastday: ForecastData[] };
 };
+
+export type TempUnit = "_c" | "_f"

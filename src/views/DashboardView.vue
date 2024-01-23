@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import WeatherCard from '@/components/WeatherCard.vue'
+import { TempUnit } from "@/types/weatherTypes";
 
 const defaultLat = "48.367470"
 const defaultLng = "14.516010"
 const locationName = "Hagenberg im Mühlkreis"
 
-
-const selectedUnit = ref<string>("_c");
+const selectedUnit = ref<TempUnit>("_c");
 const options = [
     { value: "_c", text: 'Celsius' },
     { value: '_f', text: 'Fahrenheit' },
