@@ -1,3 +1,4 @@
+// from 2024-01-20 to Jan 20
 export const formatDate = (inputDate: string): string => {
     const dateObject = new Date(inputDate);
 
