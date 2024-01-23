@@ -2,7 +2,7 @@
 import { defineProps, watch, ref } from "vue";
 import { useQuery } from '@tanstack/vue-query'
 
-import { AllWeatherData } from '@/types/weatherTypes';
+import { AllWeatherData } from '@/types';
 import ForecastListItem from "./ForecastListItem.vue";
 
 const props = defineProps({
@@ -147,4 +147,3 @@ div {
     }
 }
 </style>
-  

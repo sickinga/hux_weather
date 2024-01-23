@@ -18,7 +18,7 @@ const options = [
 <template>
     <div class="container">
         <h1>Weather Dashboard</h1>
-        <b-form-select v-model="selectedUnit" :options="options" size="sm" class="unit-select"></b-form-select>
+        <b-form-select v-model="selectedUnit" :options="options" size="sm" class="unit-select" />
         <Suspense>
             <WeatherCard :lat="defaultLat" :lng="defaultLng" :location-name="locationName" :tempUnit="selectedUnit" />
         </Suspense>
