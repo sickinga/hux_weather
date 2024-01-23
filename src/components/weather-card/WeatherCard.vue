@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { defineProps, watch, ref } from "vue";
-import { useQuery } from '@tanstack/vue-query';
 import { TempUnit } from "@/types/weatherTypes";
 
-import { AllWeatherData } from '@/types/weatherTypes';
-import ForecastListItem from "./ForecastListItem.vue";
+import ForecastListItem from "../ForecastListItem.vue";
+import { useWeatherApi } from "./weather-card.hook";
 
 const props = defineProps({
     lat: String,
@@ -19,67 +18,53 @@ watch(() => props.tempUnit, () => {
     tempUnit.value = props.tempUnit === '_f' ? "°F" : "°C"
 })
 
-const fetchWeatherData = async (): Promise<AllWeatherData> => {
-    const url = `https://api.weatherapi.com/v1/forecast.json?q=${props.lat}%2C${props.lng}&days=3&lang=en&alerts=no&aqi=no&key=${process.env.VUE_APP_WEATHER_API}`
-
-    const response = await fetch(url)
-    if (!response.ok) {
-        // https://github.com/TanStack/query/issues/2258
-        throw new Error('Network response was not ok')
-    }
-    return response.json()
-}
-
-const { isPending, isError, data } = useQuery({
-    queryKey: ['weather'],
-    queryFn: fetchWeatherData,
-})
-
 function getTempKey() {
-    return tempUnit.value === '_f' ? "temp_f" : "temp_c"
+    return tempUnit.value === '°F' ? "temp_f" : "temp_c"
+}
+function getTempFeelsLikeKey() {
+    return tempUnit.value === '°F' ? "feelslike_f" : "feelslike_c"
 }
 
-function getTempFeelsLikeKey() {
-    return tempUnit.value === '_f' ? "feelslike_f" : "feelslike_c"
-}
+const query = useWeatherApi(props.lat ?? '', props.lng ?? '')
+const currentData = () => query?.data.value?.current
+const forecastData = () => query?.data.value?.forecast
 </script>
 
 <template>
     <div class="weather-card">
         <h2>{{ props.locationName }}</h2>
-        <div class="weather-info" v-if="data">
+        <div class="weather-info" v-if="query?.data?.value">
             <b-container class="grid-container">
                 <b-row class="text-center" align-v="center">
                     <b-col class="current-temp">
-                        <!-- FIXME: fix TS error -->
-                        {{ data.current[getTempKey()] }} {{ tempUnit }}
+                        {{ query?.data?.value?.current[getTempKey()] }} {{ tempUnit }}
                     </b-col>
-                    <b-col><img class="current-icon" :src="data.current.condition.icon"
-                            :alt="data.current.condition.text" />
+                    <b-col><img class="current-icon" :src="currentData()?.condition.icon"
+                            :alt="currentData()?.condition.text" />
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col>
-                        Feels like: {{ data.current[getTempFeelsLikeKey()] }} {{ tempUnit }}
+                        Feels like: {{ query?.data?.value?.current[getTempFeelsLikeKey()] }} {{ tempUnit }}
                     </b-col>
                     <b-col>{{
-                        data.current.condition.text }}</b-col>
+                        currentData()?.condition.text }}</b-col>
                 </b-row>
                 <b-row>
-                    <b-list-group v-for="d in data.forecast.forecastday" v-bind:key="d.date" class="forecast-list">
+                    <b-list-group v-for="d in forecastData()?.forecastday" v-bind:key="d.date" class="forecast-list">
                         <forecast-list-item :data="d" :temp-unit="tempUnit"
                             :temp-unit-postfix="props.tempUnit"></forecast-list-item>
                     </b-list-group>
                 </b-row>
                 <b-row>
-                    <div class="updated-text">Last updated at: {{ data.current.last_updated }}</div>
+                    <div class="updated-text">Last updated at: {{ currentData()?.last_updated }}</div>
                 </b-row>
             </b-container>
         </div>
-        <div v-else-if="isPending">
+        <div v-else-if="query?.isPending">
             <b-spinner label="Spinning"></b-spinner>
         </div>
-        <div v-else-if="isError">
+        <div v-else-if="query?.isError">
             <p>Error fetching data</p>
         </div>
     </div>
@@ -156,4 +141,3 @@ div {
     }
 }
 </style>
-  
