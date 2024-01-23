@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import WeatherCard from '@/components/WeatherCard.vue'
+import WeatherCard from '@/components/weather-card/WeatherCard.vue'
 
 const defaultLat = "48.367470"
 const defaultLng = "14.516010"
