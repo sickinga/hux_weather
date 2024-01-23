@@ -1,6 +1,21 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import { VueQueryPlugin } from '@tanstack/vue-query'
+import { QueryClient, VueQueryPlugin } from "@tanstack/vue-query";
 
-createApp(App).use(router).use(VueQueryPlugin).mount("#app");
+const queryClient = new QueryClient();
+
+const app = createApp(App).use(router).use(VueQueryPlugin, { queryClient });
+
+if (import.meta.env.MODE === "test") {
+    const enableMocking = async () => {
+        const { worker } = await import("./mocks/browser");
+        return worker.start();
+    };
+
+    enableMocking().then(() => {
+        app.mount("#app");
+    });
+} else {
+    app.mount("#app");
+}
