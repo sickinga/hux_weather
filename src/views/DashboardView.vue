@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import WeatherCard from '@/components/weather-card/WeatherCard.vue'
 
 const defaultLat = "48.367470"
@@ -7,11 +7,15 @@ const defaultLng = "14.516010"
 const locationName = "Hagenberg im Mühlkreis"
 
 
-const selectedUnit = ref<string>("_c");
+const selectedUnit = ref<string>(localStorage.getItem('tempUnit') || "_c");
 const options = [
     { value: "_c", text: 'Celsius' },
     { value: '_f', text: 'Fahrenheit' },
 ];
+
+watch(() => selectedUnit.value, () => {
+    localStorage.setItem('tempUnit', selectedUnit.value)
+})
 
 </script>
 

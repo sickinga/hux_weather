@@ -1,6 +1,5 @@
 import type { AllWeatherData } from "@/types";
 import { useQuery, type UseQueryReturnType } from "@tanstack/vue-query";
-import { toValue } from "vue";
 
 function url(lat: string, lng: string) {
     return `https://api.weatherapi.com/v1/forecast.json?q=${lat}%2C${lng}&days=3&lang=en&alerts=no&aqi=no&key=${process.env.VUE_APP_WEATHER_API}`;
