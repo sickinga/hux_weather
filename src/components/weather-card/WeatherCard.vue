@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { defineProps, watch, ref } from "vue";
+import { defineProps, computed } from "vue";
+import { TempUnit } from "@/types";
 
 import ForecastListItem from "../ForecastListItem.vue";
 import { useWeatherApi } from "./weather-card.hook";
@@ -8,18 +9,23 @@ const props = defineProps({
     lat: String,
     lng: String,
     locationName: String,
-    tempUnit: String
+    tempUnit: String as () => TempUnit,
 })
 
-const tempUnit = ref<string>("°C")
-
-watch(() => props.tempUnit, () => {
-    tempUnit.value = props.tempUnit === '_f' ? "°F" : "°C"
-})
+function getTempKey() {
+    return props.tempUnit === '°F' ? "temp_f" : "temp_c"
+}
+function getTempFeelsLikeKey() {
+    return props.tempUnit === '°F' ? "feelslike_f" : "feelslike_c"
+}
 
 const query = useWeatherApi(props.lat ?? '', props.lng ?? '')
 const currentData = () => query?.data.value?.current
 const forecastData = () => query?.data.value?.forecast
+
+const getTempUnitPostfix = computed(() => {
+    return props.tempUnit === '°F' ? "_f" : "_c"
+})
 </script>
 
 <template>
@@ -29,8 +35,7 @@ const forecastData = () => query?.data.value?.forecast
             <b-container class="grid-container">
                 <b-row class="text-center" align-v="center">
                     <b-col class="current-temp">
-                        <!-- FIXME: fix TS error -->
-                        {{ query?.data?.value?.current["temp" + props.tempUnit] }} {{ tempUnit }}
+                        {{ query?.data?.value?.current[getTempKey()] }} {{ props.tempUnit }}
                     </b-col>
                     <b-col><img class="current-icon" :src="currentData()?.condition.icon"
                             :alt="currentData()?.condition.text" />
@@ -38,15 +43,15 @@ const forecastData = () => query?.data.value?.forecast
                 </b-row>
                 <b-row>
                     <b-col>
-                        Feels like: {{ query?.data?.value?.current["feelslike" + props.tempUnit] }} {{ tempUnit }}
+                        Feels like: {{ query?.data?.value?.current[getTempFeelsLikeKey()] }} {{ props.tempUnit }}
                     </b-col>
                     <b-col>{{
                         currentData()?.condition.text }}</b-col>
                 </b-row>
                 <b-row>
                     <b-list-group v-for="d in forecastData()?.forecastday" v-bind:key="d.date" class="forecast-list">
-                        <forecast-list-item :data="d" :temp-unit="tempUnit"
-                            :temp-unit-postfix="props.tempUnit"></forecast-list-item>
+                        <forecast-list-item :data="d" :temp-unit="props.tempUnit"
+                            :temp-unit-postfix="getTempUnitPostfix"></forecast-list-item>
                     </b-list-group>
                 </b-row>
                 <b-row>
