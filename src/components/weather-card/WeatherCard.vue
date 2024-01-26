@@ -42,10 +42,10 @@ const getTempUnitPostfix = computed(() => {
                     </b-col>
                 </b-row>
                 <b-row>
-                    <b-col>
+                    <b-col class="feels-like-temp">
                         Feels like: {{ query?.data?.value?.current[getTempFeelsLikeKey()] }} {{ props.tempUnit }}
                     </b-col>
-                    <b-col>{{
+                    <b-col class="condition">{{
                         currentData()?.condition.text }}</b-col>
                 </b-row>
                 <b-row>
@@ -60,10 +60,10 @@ const getTempUnitPostfix = computed(() => {
             </b-container>
         </div>
         <div v-else-if="query?.isPending">
-            <b-spinner label="Spinning"></b-spinner>
+            <b-spinner class="spinner" label="Spinning"></b-spinner>
         </div>
         <div v-else-if="query?.isError">
-            <p>Error fetching data</p>
+            <p class="error-message">Error fetching data</p>
         </div>
     </div>
 </template>
