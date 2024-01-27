@@ -1,9 +1,5 @@
 import { mount } from "@vue/test-utils";
-import {
-    QueryClient,
-    VueQueryPlugin,
-    UseQueryReturnType,
-} from "@tanstack/vue-query";
+import { UseQueryReturnType } from "@tanstack/vue-query";
 
 import WeatherCard from "@/components/weather-card/WeatherCard.vue";
 import * as hooks from "@/components/weather-card/weather-card.hook";
@@ -13,7 +9,6 @@ import DashboardViewVue from "@/views/DashboardView.vue";
 import { setupGlobalTestEnv } from "@/mocks/test-setup";
 
 describe("DashboardView", () => {
-    const queryClient = new QueryClient();
     const setupEnv = setupGlobalTestEnv();
 
     it("renders the view with weather card correctly", () => {
@@ -51,9 +46,7 @@ describe("DashboardView", () => {
         );
         const wrapper = mount(DashboardViewVue, {
             props: {},
-            global: {
-                plugins: [[VueQueryPlugin, { queryClient }]],
-            },
+            setupEnv,
         });
 
         const picker = wrapper.find(".unit-select");
@@ -77,26 +70,15 @@ describe("DashboardView", () => {
                 >)
         );
 
-        global.localStorage = {
-            getItem: () => "°F",
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            setItem: () => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            clear: () => {},
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
-            removeItem: () => {},
-            length: 1,
-            key: () => "°F",
-        };
+        jest.spyOn(Storage.prototype, "getItem");
+        Storage.prototype.getItem = jest.fn().mockReturnValue("°F");
 
         const wrapper = mount(DashboardViewVue, {
             props: {},
-            global: {
-                plugins: [[VueQueryPlugin, { queryClient }]],
-            },
+            setupEnv,
         });
 
         const card = wrapper.findComponent(WeatherCard);
-        expect(card.props("tempUnit")).toBe("°C");
+        expect(card.props("tempUnit")).toBe("°F");
     });
 });

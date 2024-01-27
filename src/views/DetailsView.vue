@@ -7,11 +7,12 @@ import { useWeatherApi } from "../components/weather-card/weather-card.hook";
 
 const route = useRoute();
 const query = useWeatherApi(route.params.lat as string ?? '', route.params.lng as string ?? '')
+const name = route.params.name as string ?? ''
 
 </script>
 <template>
     <div>
-        <h1>{{ $route.params.name }}</h1>
+        <h1>{{ name }}</h1>
         <div class="weather-info" v-if="query?.data?.value">
             <WeatherDetailCard :current-data="query?.data?.value.current" />
             <li v-for="data in query?.data?.value.forecast.forecastday" :key="data.date">

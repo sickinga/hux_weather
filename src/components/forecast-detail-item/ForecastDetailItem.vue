@@ -28,16 +28,17 @@ const getTempKey = computed(() => {
     <div class="weather-card">
         <div class="forecast-container">
             <div class="date">{{ formatDate(props.fData?.date || "") }}</div>
-            <div>Max: {{ props.fData?.day[getMaxKey()].toFixed(1) }} {{
+            <div class="temp">Max: {{ props.fData?.day[getMaxKey()].toFixed(1) }} {{
                 selectedUnit
             }} <br />Min: {{
     props.fData?.day[getMinKey()].toFixed(1) }} {{ selectedUnit }}</div>
 
-            <div><img class="forecast-icon" :src="props.fData?.day.condition.icon" :alt="props.fData?.day.condition.text" />
+            <div class="condition"><img class="forecast-icon" :src="props.fData?.day.condition.icon"
+                    :alt="props.fData?.day.condition.text" />
                 <br />
                 {{ props.fData?.day.condition.text }}
             </div>
-            <div class="left-align">
+            <div class="left-align further-data">
                 Max. wind: {{ props.fData?.day.maxwind_kph }} km/h <br />
                 Total precipitation: {{ props.fData?.day.totalprecip_mm.toFixed(2) }} mm <br />
                 Average humidity: {{ props.fData?.day.avghumidity }} %
@@ -45,7 +46,6 @@ const getTempKey = computed(() => {
         </div>
         <div class="left-align space">Temperature:</div>
         <div>
-
             <ForecastLineChartWrapper :hour-data="fData?.hour" :temp-key="getTempKey" />
         </div>
         <div class="astro">

@@ -28,7 +28,7 @@ function getTempFeelsLikeKey() {
                             {{ props.currentData?.[getTempKey()] }} {{ selectedUnit }}
                         </div>
                     </b-row>
-                    <b-row align-h="center">
+                    <b-row align-h="center" class="feels-like">
                         Feels like: {{ props.currentData?.[getTempFeelsLikeKey()] }} {{ selectedUnit }}
                     </b-row>
                 </b-col>
@@ -37,11 +37,11 @@ function getTempFeelsLikeKey() {
                         <img class="current-icon" :src="props.currentData?.condition.icon"
                             :alt="props.currentData?.condition.text" />
                     </b-row>
-                    <b-row align-h="center">
+                    <b-row align-h="center" class="condition">
                         {{ props.currentData?.condition.text }}
                     </b-row>
                 </b-col>
-                <b-col align-self="center">
+                <b-col align-self="center" class="further-data">
                     <div>Wind: {{ props.currentData?.wind_kph }} km/h</div>
                     <div>Precipitation: {{ props.currentData?.precip_mm }} mm</div>
                     <div>Humidity: {{ props.currentData?.humidity }} %</div>
