@@ -77,7 +77,7 @@ type AstroData = {
     is_sun_up: number;
 };
 
-type HourData = {
+export type HourData = {
     time_epoch: number;
     time: string;
     temp_c: number;

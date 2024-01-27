@@ -27,6 +27,14 @@ const routes: Array<RouteRecordRaw> = [
                 /* webpackChunkName: "dashboard" */ "../views/DashboardView.vue"
             ),
     },
+    {
+        path: "/details/:lat/:lng/:name",
+        name: "details",
+        component: () =>
+            import(
+                /* webpackChunkName: "dashboard" */ "../views/DetailsView.vue"
+            ),
+    },
 ];
 
 const router = createRouter({
