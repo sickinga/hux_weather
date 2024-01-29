@@ -6,7 +6,7 @@ export interface GeocoderContext {
 
 export interface GeocoderFeature {
     id: string;
-    type: "Feature";
+    type: 'Feature';
     place_type: Array<string>;
     relevance: number;
     properties: object;
@@ -20,7 +20,7 @@ export interface GeocoderFeature {
 }
 
 export interface GeocoderResult {
-    type: "FeatureCollection";
+    type: 'FeatureCollection';
     query: Array<string | number>;
     features: Array<GeocoderFeature>;
     attribution: string;

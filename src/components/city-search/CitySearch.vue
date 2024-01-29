@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useCitySearch } from "./city-search.hook";
-import { type GeocoderFeature } from "@/types";
+import { GeocoderFeature } from "@/types";
 
 const searchTerm = ref("");
 const suggestionsVisible = ref(false);
@@ -27,10 +27,7 @@ function handleInput(city: GeocoderFeature) {
             placeholder="Search for a city"
             class="city-search__input"
         />
-        <div
-            v-bind:hidden="!suggestionsVisible"
-            class="city-search__suggestions"
-        >
+        <div v-bind:hidden="!suggestionsVisible" class="city-search__suggestions">
             <div
                 class="city-search__suggestion"
                 v-for="city in query?.data.value?.features"
