@@ -1,21 +1,16 @@
 import { createApp } from "vue";
+import BootstrapVue3 from "bootstrap-vue-3";
 import App from "./App.vue";
 import router from "./router";
-import { QueryClient, VueQueryPlugin } from "@tanstack/vue-query";
+import { VueQueryPlugin, QueryClient } from "@tanstack/vue-query";
+
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
 
 const queryClient = new QueryClient();
 
-const app = createApp(App).use(router).use(VueQueryPlugin, { queryClient });
-
-if (import.meta.env.MODE === "test") {
-    const enableMocking = async () => {
-        const { worker } = await import("./mocks/browser");
-        return worker.start();
-    };
-
-    enableMocking().then(() => {
-        app.mount("#app");
-    });
-} else {
-    app.mount("#app");
-}
+const app = createApp(App);
+app.use(BootstrapVue3);
+app.use(VueQueryPlugin, { queryClient });
+app.use(router);
+app.mount("#app");
