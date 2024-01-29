@@ -54,8 +54,16 @@ const getTempUnitPostfix = computed(() => {
                             :temp-unit-postfix="getTempUnitPostfix"></forecast-list-item>
                     </b-list-group>
                 </b-row>
-                <b-row>
-                    <div class="updated-text">Last updated at: {{ currentData()?.last_updated }}</div>
+                <b-row class="last-row">
+                    <b-col>
+                        <div class="updated-text">Last updated at: {{ currentData()?.last_updated }}</div>
+                    </b-col>
+                    <b-col>
+                        <router-link
+                            :to="{ name: 'details', params: { lat: props.lat, lng: props.lng, name: props.locationName } }">
+                            <div class="nav-text">Go to details ></div>
+                        </router-link>
+                    </b-col>
                 </b-row>
             </b-container>
         </div>
@@ -118,8 +126,13 @@ div {
 
 .updated-text {
     margin-top: 5px;
-    text-align: end;
+    text-align: start;
     font-size: small;
+}
+
+.nav-text {
+    margin-top: 5px;
+    text-align: end;
 }
 
 /* Responsive styles */
@@ -137,5 +150,12 @@ div {
         margin: 10px auto;
         /* Center the card on larger screens */
     }
+}
+
+.last-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
 }
 </style>
