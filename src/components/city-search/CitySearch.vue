@@ -64,21 +64,17 @@ function saveCity(city: GeocoderFeature) {
                 class="city-search__suggestion"
                 v-for="city in query?.data.value?.features"
                 v-bind:key="city.id"
-                v-on:click="navigateToDetails(city)"
+                @click="navigateToDetails(city)"
             >
                 {{ city.place_name }}
-                <b-button variant="link" @click="saveCity(city)">
+                <b-button variant="link" @click.stop="saveCity(city)">
                     <b-icon-bookmark-star-fill></b-icon-bookmark-star-fill>
                 </b-button>
-                </div>
+            </div>
         </div>
     </div>
     <div
-        v-bind:hidden="
-            !suggestionsVisible ||
-            !query?.data.value?.features ||
-            query?.data.value?.features?.length == 0
-        "
+        v-bind:hidden="!suggestionsVisible || searchTerm.length < 3"
         class="backdrop"
     ></div>
 </template>

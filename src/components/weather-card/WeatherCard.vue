@@ -204,18 +204,23 @@ div {
     position: absolute;
     top: 10px;
     right: 10px;
-    opacity: 0;
     text-decoration: none;
     color: #6c757d;
     background-color: rgba(255, 255, 255, 0.8);
-    transition: opacity 0.2s ease-in-out;
     &:hover {
         color: #495057;
         background-color: rgba(255, 255, 255, 1);
     }
 }
 
-.weather-card:hover .remove-button {
-    opacity: 1;
+@media (hover: hover) {
+    .remove-button {
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .weather-card:hover .remove-button {
+        opacity: 1;
+    }
 }
 </style>
