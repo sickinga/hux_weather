@@ -12,7 +12,7 @@ const name = route.query.name as string ?? ''
 </script>
 <template>
     <div>
-        <h1>{{ name }}</h1>
+        <h1 class="details-view-header">{{ name }}</h1>
         <div class="weather-info" v-if="query?.data?.value">
             <WeatherDetailCard :current-data="query?.data?.value.current" />
             <li v-for="data in query?.data?.value.forecast.forecastday" :key="data.date">
@@ -31,5 +31,9 @@ const name = route.query.name as string ?? ''
 <style scoped>
 li {
     list-style-type: none;
+}
+
+.details-view-header {
+    padding: 0 10px;
 }
 </style>

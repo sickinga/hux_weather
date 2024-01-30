@@ -25,6 +25,7 @@ var currentCity = computed(() => {
         /
         <b-button variant="link">{{ currentCity }}</b-button>
     </div>
+    <div class="margin"></div>
 </template>
 
 <style scoped>
@@ -36,6 +37,10 @@ var currentCity = computed(() => {
 @media (hover: none) {
     .breadcrumbs-bar {
         display: none;
+    }
+
+    .margin {
+        height: 10px;
     }
 }
 </style>
