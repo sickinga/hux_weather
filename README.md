@@ -5,13 +5,19 @@ Team members: Thomas Sickinger, Lea Franz
 ## Project
 
 This is a weather dashboard application built with Vue.js and TypeScript for the course Hypermedia UX Engineering.   
-The weather data is from the [weather api](https://www.weatherapi.com/) API. An API key is added in the live deployment. For running it locally, it has to be added to your local project.
+
+The weather data is from the [weather api](https://www.weatherapi.com/) API. The geo data is from [mapbox](https://docs.mapbox.com/api/search/geocoding/). The API keys are added in the live deployment. For running it locally, they have to be added to your local project.
 
 Live deployment: tbd
 
-**Features and functionalities:**
+**Features and functionalities:**    
+Cities can be saved via the bookmark button in the search results and if a search result is clicked the detail page is opened.
+Saved cities can be removed from the dashboard via the delete bookmark button while hovering over the weather card.
+
+
 - weather dashboard for multiple locations
 - location search
+- add and remove locations with pinia state management
 - local storage: selected locations and temperature unit
 - dynamic routing to a weather details page for each location
 - responsive for desktop and mobile
@@ -24,9 +30,10 @@ CI/CD: tbd
 npm install
 ```
 
-Add the weather [API](https://www.weatherapi.com/) key to your .env file like this:
+Add the [weather API](https://www.weatherapi.com/) and [mapbox token](https://docs.mapbox.com/api/search/geocoding/) key to your .env file like this (like .env.example):
 ```
 VUE_APP_WEATHER_API=
+VUE_APP_MAPBOX_TOKEN=
 ```
 
 ### Compiles and hot-reloads for development
