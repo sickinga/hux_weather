@@ -1,0 +1,9 @@
+name: Run tests on PR
+'on': pull_request
+jobs:
+  run_tests:
+    if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm i && npm run test:unit
