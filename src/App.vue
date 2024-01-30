@@ -1,4 +1,11 @@
+<script setup lang="ts">
+import CitySearch from "./components/city-search/CitySearch.vue";
+</script>
+
 <template>
+    <div class="city-search-wrapper">
+        <CitySearch />
+    </div>
     <router-view />
 </template>
 
@@ -9,5 +16,14 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
+}
+
+@media (min-width: 992px) {
+    .city-search-wrapper {
+        /* Limit width on larger screens for better readability */
+        max-width: 600px;
+        /* Center the card on larger screens */
+        margin: 10px auto;
+    }
 }
 </style>

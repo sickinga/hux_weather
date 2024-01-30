@@ -22,12 +22,16 @@ function handleInput(city: GeocoderFeature) {
 
 <template>
     <div class="city-search">
-        <input
+        <b-form-input
             v-model="searchTerm"
             placeholder="Search for a city"
             class="city-search__input"
-        />
-        <div v-bind:hidden="!suggestionsVisible" class="city-search__suggestions">
+        ></b-form-input>
+
+        <div
+            v-bind:hidden="!suggestionsVisible"
+            class="city-search__suggestions"
+        >
             <div
                 class="city-search__suggestion"
                 v-for="city in query?.data.value?.features"
