@@ -1,4 +1,4 @@
-import { shallowMount, mount } from "@vue/test-utils";
+import { shallowMount } from "@vue/test-utils";
 import { UseQueryReturnType } from "@tanstack/vue-query";
 
 import * as hooks from "@/components/weather-card/weather-card.hook";
@@ -9,7 +9,7 @@ import { setupGlobalTestEnv } from "@/mocks/test-setup";
 
 jest.mock("vue-router", () => ({
     useRoute: jest.fn().mockReturnValue({
-        params: {
+        query: {
             lat: "52.5200",
             lng: "13.4050",
             name: "Berlin",
@@ -76,7 +76,7 @@ describe("DetailsView", () => {
                     Error
                 >)
         );
-        const wrapper = mount(DetailsView, {
+        const wrapper = shallowMount(DetailsView, {
             setupEnv,
         });
 
@@ -94,7 +94,7 @@ describe("DetailsView", () => {
                     Error
                 >)
         );
-        const wrapper = mount(DetailsView, {
+        const wrapper = shallowMount(DetailsView, {
             setupEnv,
         });
 

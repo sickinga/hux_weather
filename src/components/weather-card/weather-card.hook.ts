@@ -20,7 +20,7 @@ export function useWeatherApi(
     };
 
     const query = useQuery<AllWeatherData>({
-        queryKey: ["weather"],
+        queryKey: ["weather", lat, lng],
         queryFn: () => fetchWeatherData(lat, lng),
     });
 

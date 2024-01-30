@@ -2,65 +2,102 @@
 import { defineProps, computed } from "vue";
 import { TempUnit } from "@/types";
 
-import ForecastListItem from "../ForecastListItem.vue";
+import ForecastListItem from "../forecast-list-item/ForecastListItem.vue";
 import { useWeatherApi } from "./weather-card.hook";
+import { useSavedCitiesStore } from "@/stores/saved-cities.store";
+import { City } from "@/types/city";
 
 const props = defineProps({
-    lat: String,
-    lng: String,
-    locationName: String,
+    city: Object as () => City,
     tempUnit: String as () => TempUnit,
-})
+});
+
+const store = useSavedCitiesStore();
 
 function getTempKey() {
-    return props.tempUnit === '°F' ? "temp_f" : "temp_c"
+    return props.tempUnit === "°F" ? "temp_f" : "temp_c";
 }
 function getTempFeelsLikeKey() {
-    return props.tempUnit === '°F' ? "feelslike_f" : "feelslike_c"
+    return props.tempUnit === "°F" ? "feelslike_f" : "feelslike_c";
 }
 
-const query = useWeatherApi(props.lat ?? '', props.lng ?? '')
-const currentData = () => query?.data.value?.current
-const forecastData = () => query?.data.value?.forecast
+const query = useWeatherApi(
+    props?.city?.lat.toString() ?? "",
+    props?.city?.lng.toString() ?? ""
+);
+const currentData = () => query?.data.value?.current;
+const forecastData = () => query?.data.value?.forecast;
 
 const getTempUnitPostfix = computed(() => {
-    return props.tempUnit === '°F' ? "_f" : "_c"
-})
+    return props.tempUnit === "°F" ? "_f" : "_c";
+});
+
+function removeCity() {
+    if (props?.city) store.removeCity(props?.city);
+}
 </script>
 
 <template>
     <div class="weather-card">
-        <h2>{{ props.locationName }}</h2>
+        <b-button class="remove-button" variant="link" @click="removeCity()">
+            <b-icon-bookmark-x-fill></b-icon-bookmark-x-fill>
+        </b-button>
+        <h2>{{ props?.city?.name }}</h2>
         <div class="weather-info" v-if="query?.data?.value">
             <b-container class="grid-container">
                 <b-row class="text-center" align-v="center">
                     <b-col class="current-temp">
-                        {{ query?.data?.value?.current[getTempKey()] }} {{ props.tempUnit }}
+                        {{ query?.data?.value?.current[getTempKey()] }}
+                        {{ props.tempUnit }}
                     </b-col>
-                    <b-col><img class="current-icon" :src="currentData()?.condition.icon"
-                            :alt="currentData()?.condition.text" />
+                    <b-col
+                        ><img
+                            class="current-icon"
+                            :src="currentData()?.condition.icon"
+                            :alt="currentData()?.condition.text"
+                        />
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col class="feels-like-temp">
-                        Feels like: {{ query?.data?.value?.current[getTempFeelsLikeKey()] }} {{ props.tempUnit }}
+                        Feels like:
+                        {{ query?.data?.value?.current[getTempFeelsLikeKey()] }}
+                        {{ props.tempUnit }}
                     </b-col>
                     <b-col class="condition">{{
-                        currentData()?.condition.text }}</b-col>
+                        currentData()?.condition.text
+                    }}</b-col>
                 </b-row>
                 <b-row>
-                    <b-list-group v-for="d in forecastData()?.forecastday" v-bind:key="d.date" class="forecast-list">
-                        <forecast-list-item :data="d" :temp-unit="props.tempUnit"
-                            :temp-unit-postfix="getTempUnitPostfix"></forecast-list-item>
+                    <b-list-group
+                        v-for="d in forecastData()?.forecastday"
+                        v-bind:key="d.date"
+                        class="forecast-list"
+                    >
+                        <forecast-list-item
+                            :data="d"
+                            :temp-unit="props.tempUnit"
+                            :temp-unit-postfix="getTempUnitPostfix"
+                        ></forecast-list-item>
                     </b-list-group>
                 </b-row>
                 <b-row class="last-row">
                     <b-col>
-                        <div class="updated-text">Last updated at: {{ currentData()?.last_updated }}</div>
+                        <div class="updated-text">
+                            Last updated at: {{ currentData()?.last_updated }}
+                        </div>
                     </b-col>
                     <b-col>
                         <router-link
-                            :to="{ name: 'details', params: { lat: props.lat, lng: props.lng, name: props.locationName } }">
+                            :to="{
+                                name: 'details',
+                                query: {
+                                    lat: props?.city?.lat,
+                                    lng: props?.city?.lng,
+                                    name: props?.city?.name,
+                                },
+                            }"
+                        >
                             <div class="nav-text">Go to details ></div>
                         </router-link>
                     </b-col>
@@ -75,9 +112,7 @@ const getTempUnitPostfix = computed(() => {
         </div>
     </div>
 </template>
-  
 
-  
 <style scoped>
 .grid-container {
     padding-right: 0px;
@@ -89,6 +124,12 @@ const getTempUnitPostfix = computed(() => {
     margin: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    h2 {
+        margin-left: 10px;
+        text-align: start;
+    }
 }
 
 .weather-info {
@@ -157,5 +198,29 @@ div {
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
+}
+
+.remove-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-decoration: none;
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, 0.8);
+    &:hover {
+        color: #495057;
+        background-color: rgba(255, 255, 255, 1);
+    }
+}
+
+@media (hover: hover) {
+    .remove-button {
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .weather-card:hover .remove-button {
+        opacity: 1;
+    }
 }
 </style>

@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import ForescastListItem from "@/components/ForecastListItem.vue";
+import ForescastListItem from "@/components/forecast-list-item/ForecastListItem.vue";
 
 describe("ForecastListItem.vue", () => {
     it("render item text correctly", () => {

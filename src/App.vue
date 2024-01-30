@@ -1,9 +1,11 @@
+<script setup lang="ts">
+import CitySearch from "./components/city-search/CitySearch.vue";
+</script>
+
 <template>
-    <nav>
-        <router-link to="/">Home</router-link> |
-        <router-link to="/about">About</router-link> |
-        <router-link to="/dashboard">Dashboard</router-link>
-    </nav>
+    <div class="city-search-wrapper">
+        <CitySearch />
+    </div>
     <router-view />
 </template>
 
@@ -16,16 +18,16 @@
     color: #2c3e50;
 }
 
-nav {
-    padding: 30px;
+.city-search-wrapper {
+    margin-bottom: 20px;
 }
 
-nav a {
-    font-weight: bold;
-    color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-    color: #42b983;
+@media (min-width: 992px) {
+    .city-search-wrapper {
+        /* Limit width on larger screens for better readability */
+        max-width: 600px;
+        /* Center the card on larger screens */
+        margin: 10px auto 20px;
+    }
 }
 </style>

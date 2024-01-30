@@ -1,4 +1,4 @@
-import { formatDate } from "../date.utils";
+import { formatDate } from "@/utils/date.utils";
 
 describe("Date Utils", () => {
     it("formats a date correctly", () => {
