@@ -23,7 +23,10 @@ function getTempFeelsLikeKey() {
     return props.tempUnit === "°F" ? "feelslike_f" : "feelslike_c";
 }
 
-const query = useWeatherApi(props.city?.lat.toString() ?? "", props.city?.lng.toString() ?? "");
+const query = useWeatherApi(
+    props.city?.lat.toString() ?? "",
+    props.city?.lng.toString() ?? ""
+);
 const currentData = () => query?.data.value?.current;
 const forecastData = () => query?.data.value?.forecast;
 
@@ -58,9 +61,7 @@ function removeCity() {
                 <b-row>
                     <b-col class="feels-like-temp">
                         Feels like:
-                        {{
-                            query?.data?.value?.current[getTempFeelsLikeKey()]
-                        }}
+                        {{ query?.data?.value?.current[getTempFeelsLikeKey()] }}
                         {{ props.tempUnit }}
                     </b-col>
                     <b-col class="condition">{{
@@ -90,7 +91,7 @@ function removeCity() {
                         <router-link
                             :to="{
                                 name: 'details',
-                                params: {
+                                query: {
                                     lat: props.city?.lat,
                                     lng: props.city?.lng,
                                     name: props.city?.name,

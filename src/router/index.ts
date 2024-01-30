@@ -13,15 +13,15 @@ const routes: Array<RouteRecordRaw> = [
         // which is lazy-loaded when the route is visited.
         component: () =>
             import(
-                /* webpackChunkName: "dashboard" */ "../views/DashboardView.vue"
+                "../views/DashboardView.vue"
             ),
     },
     {
-        path: "/details/:lat/:lng/:name",
+        path: "/details",
         name: "details",
         component: () =>
             import(
-                /* webpackChunkName: "dashboard" */ "../views/DetailsView.vue"
+                "../views/DetailsView.vue"
             ),
     },
 ];

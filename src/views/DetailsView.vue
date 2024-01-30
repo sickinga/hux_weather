@@ -6,8 +6,8 @@ import ForecastDetailItem from '@/components/forecast-detail-item/ForecastDetail
 import { useWeatherApi } from "../components/weather-card/weather-card.hook";
 
 const route = useRoute();
-const query = useWeatherApi(route.params.lat as string ?? '', route.params.lng as string ?? '')
-const name = route.params.name as string ?? ''
+const query = useWeatherApi(route.query.lat as string ?? '', route.query.lng as string ?? '')
+const name = route.query.name as string ?? ''
 
 </script>
 <template>
@@ -27,3 +27,9 @@ const name = route.params.name as string ?? ''
         </div>
     </div>
 </template>
+
+<style scoped>
+li {
+    list-style-type: none;
+}
+</style>
