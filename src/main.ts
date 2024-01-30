@@ -1,5 +1,6 @@
 import { createApp, watch } from "vue";
 import BootstrapVue3 from "bootstrap-vue-3";
+import { BootstrapIconsPlugin } from "bootstrap-icons-vue";
 import App from "./App.vue";
 import router from "./router";
 import { VueQueryPlugin, QueryClient } from "@tanstack/vue-query";
@@ -20,6 +21,7 @@ watch(pinia.state, (state) => {
 
 const app = createApp(App);
 app.use(BootstrapVue3);
+app.use(BootstrapIconsPlugin);
 app.use(VueQueryPlugin, { queryClient });
 app.use(pinia)
 app.use(router);
