@@ -1,6 +1,6 @@
 import { GeocoderResult } from "@/types";
 import { useQuery } from "@tanstack/vue-query";
-import { Ref, toValue, watch } from "vue";
+import { Ref, toValue } from "vue";
 
 function url(searchTerm: string) {
     return `https://api.mapbox.com/geocoding/v5/mapbox.places/${searchTerm}.json?access_token=${process.env.VUE_APP_MAPBOX_TOKEN}&types=place`;
@@ -17,8 +17,6 @@ export function useCitySearch(searchTerm: Ref<string>) {
         queryKey: ["city-search", searchTerm],
         queryFn: () => fetchCities(toValue(searchTerm)),
     });
-
-    watch(searchTerm, () => query.refetch());
 
     return query;
 }
