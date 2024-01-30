@@ -2,10 +2,12 @@
 import { ref, watch } from "vue";
 import { useCitySearch } from "./city-search.hook";
 import { GeocoderFeature } from "@/types";
+import { useSavedCitiesStore } from "@/stores/saved-cities.store";
 
 const searchTerm = ref("");
 const suggestionsVisible = ref(false);
 const query = useCitySearch(searchTerm);
+const store = useSavedCitiesStore();
 
 watch(searchTerm, () => {
     suggestionsVisible.value = true;
@@ -17,6 +19,12 @@ document.onclick = () => {
 
 function handleInput(city: GeocoderFeature) {
     searchTerm.value = city.place_name;
+    var newCity = {
+        name: city.place_name,
+        lat: city.center[1],
+        lng: city.center[0],
+    };
+    store.addCity(newCity);
 }
 </script>
 
