@@ -41,7 +41,9 @@ function removeCity() {
 
 <template>
     <div class="weather-card">
-        <button class="remove-button" @click="removeCity()">X</button>
+        <b-button class="remove-button" variant="link" @click="removeCity()">
+            <b-icon-bookmark-x-fill></b-icon-bookmark-x-fill>
+        </b-button>
         <h2>{{ props.city?.name }}</h2>
         <div class="weather-info" v-if="query?.data?.value">
             <b-container class="grid-container">
@@ -124,6 +126,12 @@ function removeCity() {
     margin: 10px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+
+    h2 {
+        margin-left: 10px;
+        text-align: start;
+    }
 }
 
 .weather-info {
@@ -192,5 +200,24 @@ div {
     justify-content: space-between;
     align-items: center;
     margin-top: 5px;
+}
+
+.remove-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 0;
+    text-decoration: none;
+    color: #6c757d;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: opacity 0.2s ease-in-out;
+    &:hover {
+        color: #495057;
+        background-color: rgba(255, 255, 255, 1);
+    }
+}
+
+.weather-card:hover .remove-button {
+    opacity: 1;
 }
 </style>
