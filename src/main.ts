@@ -11,7 +11,7 @@ import "bootstrap-vue/dist/bootstrap-vue.css";
 
 
 const queryClient = new QueryClient();
-const pinia = createPinia()
+const pinia = createPinia();
 
 watch(pinia.state, (state) => {
     if (state["saved-cities"]) {
@@ -23,6 +23,6 @@ const app = createApp(App);
 app.use(BootstrapVue3);
 app.use(BootstrapIconsPlugin);
 app.use(VueQueryPlugin, { queryClient });
-app.use(pinia)
+app.use(pinia);
 app.use(router);
 app.mount("#app");

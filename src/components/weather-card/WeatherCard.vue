@@ -2,12 +2,10 @@
 import { defineProps, computed } from "vue";
 import { TempUnit } from "@/types";
 
-import ForecastListItem from "../ForecastListItem.vue";
+import ForecastListItem from "../forecast-list-item/ForecastListItem.vue";
 import { useWeatherApi } from "./weather-card.hook";
 import { useSavedCitiesStore } from "@/stores/saved-cities.store";
 import { City } from "@/types/city";
-
-// eslint-disable-next-line no-undef
 
 const props = defineProps({
     city: Object as () => City,
@@ -24,8 +22,8 @@ function getTempFeelsLikeKey() {
 }
 
 const query = useWeatherApi(
-    props.city?.lat.toString() ?? "",
-    props.city?.lng.toString() ?? ""
+    props?.city?.lat.toString() ?? "",
+    props?.city?.lng.toString() ?? ""
 );
 const currentData = () => query?.data.value?.current;
 const forecastData = () => query?.data.value?.forecast;
@@ -35,7 +33,7 @@ const getTempUnitPostfix = computed(() => {
 });
 
 function removeCity() {
-    if (props.city) store.removeCity(props.city);
+    if (props?.city) store.removeCity(props?.city);
 }
 </script>
 
@@ -44,7 +42,7 @@ function removeCity() {
         <b-button class="remove-button" variant="link" @click="removeCity()">
             <b-icon-bookmark-x-fill></b-icon-bookmark-x-fill>
         </b-button>
-        <h2>{{ props.city?.name }}</h2>
+        <h2>{{ props?.city?.name }}</h2>
         <div class="weather-info" v-if="query?.data?.value">
             <b-container class="grid-container">
                 <b-row class="text-center" align-v="center">
@@ -94,9 +92,9 @@ function removeCity() {
                             :to="{
                                 name: 'details',
                                 query: {
-                                    lat: props.city?.lat,
-                                    lng: props.city?.lng,
-                                    name: props.city?.name,
+                                    lat: props?.city?.lat,
+                                    lng: props?.city?.lng,
+                                    name: props?.city?.name,
                                 },
                             }"
                         >

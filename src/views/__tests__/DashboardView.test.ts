@@ -11,13 +11,33 @@ import { setupGlobalTestEnv } from "@/mocks/test-setup";
 describe("DashboardView", () => {
     const setupEnv = setupGlobalTestEnv();
 
+    beforeAll(() => {
+        jest.spyOn(Storage.prototype, "getItem");
+        Storage.prototype.getItem = jest.fn((key: string) => {
+            switch (key) {
+                case "tempUnit":
+                    return "°C";
+                case "cities":
+                    return JSON.stringify([
+                        {
+                            lat: "48.367470",
+                            lng: "14.516010",
+                            name: "Hagenberg im Mühlkreis",
+                        },
+                    ]);
+                default:
+                    return null;
+            }
+        });
+    });
+
     it("renders the view with weather card correctly", () => {
         jest.spyOn(hooks, "useWeatherApi").mockImplementation(
             () =>
-                ({ data: weatherApiResponse } as unknown as UseQueryReturnType<
-                    AllWeatherData,
-                    Error
-                >)
+            ({ data: weatherApiResponse } as unknown as UseQueryReturnType<
+                AllWeatherData,
+                Error
+            >)
         );
         const wrapper = mount(DashboardViewVue, {
             props: {},
@@ -27,9 +47,9 @@ describe("DashboardView", () => {
         expect(wrapper.find("h1").text()).toBe("Weather Dashboard");
 
         const card = wrapper.findComponent(WeatherCard);
-        expect(card.props("lat")).toBe("48.367470");
-        expect(card.props("lng")).toBe("14.516010");
-        expect(card.props("locationName")).toBe("Hagenberg im Mühlkreis");
+        expect(card.props("city")?.lat).toBe("48.367470");
+        expect(card.props("city")?.lng).toBe("14.516010");
+        expect(card.props("city")?.name).toBe("Hagenberg im Mühlkreis");
         expect(card.props("tempUnit")).toBe("°C");
 
         const picker = wrapper.find(".unit-select");
@@ -39,10 +59,10 @@ describe("DashboardView", () => {
     it("should render the picker options correctly", () => {
         jest.spyOn(hooks, "useWeatherApi").mockImplementation(
             () =>
-                ({ data: weatherApiResponse } as unknown as UseQueryReturnType<
-                    AllWeatherData,
-                    Error
-                >)
+            ({ data: weatherApiResponse } as unknown as UseQueryReturnType<
+                AllWeatherData,
+                Error
+            >)
         );
         const wrapper = mount(DashboardViewVue, {
             props: {},
@@ -64,10 +84,10 @@ describe("DashboardView", () => {
     it("should use temp unit value from local storage if available", () => {
         jest.spyOn(hooks, "useWeatherApi").mockImplementation(
             () =>
-                ({ data: weatherApiResponse } as unknown as UseQueryReturnType<
-                    AllWeatherData,
-                    Error
-                >)
+            ({ data: weatherApiResponse } as unknown as UseQueryReturnType<
+                AllWeatherData,
+                Error
+            >)
         );
 
         jest.spyOn(Storage.prototype, "getItem");

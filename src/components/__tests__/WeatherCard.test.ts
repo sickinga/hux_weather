@@ -4,14 +4,12 @@ import { UseQueryReturnType } from "@tanstack/vue-query";
 import WeatherCard from "@/components/weather-card/WeatherCard.vue";
 import * as hooks from "@/components/weather-card/weather-card.hook";
 import type { AllWeatherData } from "@/types";
-import ForecastListItemVue from "@/components/ForecastListItem.vue";
+import ForecastListItemVue from "@/components/forecast-list-item/ForecastListItem.vue";
 import { weatherApiResponse } from "@/mocks/weather-data.mocks";
 import { setupGlobalTestEnv } from "@/mocks/test-setup";
 
 describe("WeatherCard", () => {
-    const lat = "52.5200";
-    const lng = "13.4050";
-    const locationName = "Berlin";
+    const city = {lat: 52.5200, lng: 152.5200, name: "Berlin"};
     const tempUnit = "°C";
     const setupEnv = setupGlobalTestEnv();
 
@@ -25,10 +23,10 @@ describe("WeatherCard", () => {
         );
         const wrapper = shallowMount(WeatherCard, {
             setupEnv,
-            props: { lat, lng, locationName, tempUnit },
+            props: { city, tempUnit },
         });
 
-        expect(wrapper.find("h2").text()).toBe(locationName);
+        expect(wrapper.find("h2").text()).toBe(city.name);
     });
 
     it("renders a spinner when data is loading", () => {
@@ -41,7 +39,7 @@ describe("WeatherCard", () => {
         );
 
         const wrapper = shallowMount(WeatherCard, {
-            props: { lat, lng, locationName, tempUnit },
+            props: { city, tempUnit },
             setupEnv,
         });
 
@@ -58,7 +56,7 @@ describe("WeatherCard", () => {
                 >)
         );
         const wrapper = shallowMount(WeatherCard, {
-            props: { lat, lng, locationName, tempUnit },
+            props: { city, tempUnit },
             setupEnv,
         });
         const errorMessage = wrapper.find(".error-message");
@@ -74,7 +72,7 @@ describe("WeatherCard", () => {
                 >)
         );
         const wrapper = shallowMount(WeatherCard, {
-            props: { lat, lng, locationName, tempUnit },
+            props: { city, tempUnit },
             setupEnv,
         });
 
@@ -106,7 +104,7 @@ describe("WeatherCard", () => {
                 >)
         );
         const wrapper = shallowMount(WeatherCard, {
-            props: { lat, lng, locationName, tempUnit },
+            props: { city, tempUnit },
             setupEnv,
         });
 
