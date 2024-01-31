@@ -4,10 +4,18 @@ import { useRoute } from "vue-router";
 import WeatherDetailCard from '@/components/weather-detail-card/WeatherDetailCard.vue'
 import ForecastDetailItem from '@/components/forecast-detail-item/ForecastDetailItem.vue'
 import { useWeatherApi } from "../components/weather-card/weather-card.hook";
+import { computed, ref, watch } from "vue";
 
 const route = useRoute();
-const query = useWeatherApi(route.query.lat as string ?? '', route.query.lng as string ?? '')
-const name = route.query.name as string ?? ''
+const lat = ref(route.query.lat as string ?? '');
+const lng = ref(route.query.lng as string ?? '');
+const query = useWeatherApi(lat, lng);
+const name = computed(() =>route.query.name as string ?? '');
+
+watch(() => route.query, () => {
+    lat.value = route.query.lat as string ?? '';
+    lng.value = route.query.lng as string ?? '';
+});
 
 </script>
 <template>
