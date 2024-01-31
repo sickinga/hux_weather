@@ -25,7 +25,6 @@ Saved cities can be removed from the dashboard via the delete bookmark button wh
 - unit tests with jest
 - three github actions: Test on PR, Build and Deploy on PR, Build and Deploy on push to master
 
-CI/CD: tbd
 
 ## Project setup
 
