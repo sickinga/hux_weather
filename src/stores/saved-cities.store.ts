@@ -14,6 +14,10 @@ export const useSavedCitiesStore = defineStore("saved-cities", {
     },
     actions: {
         addCity(city: City) {
+            if (city.name === "Your current location") {
+                const currentLocationIndex = this.cities.findIndex((c) => c.name === "Your current location");
+                if (currentLocationIndex !== -1) this.cities.splice(currentLocationIndex, 1);
+            }
             if (this.cities.some((c) => isCityEqual(c, city))) return;
             this.cities.unshift(city);
         },

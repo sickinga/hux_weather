@@ -3,6 +3,7 @@ import { ref, watch } from "vue";
 import WeatherCard from "@/components/weather-card/WeatherCard.vue";
 import { TempUnit } from "@/types";
 import { useSavedCitiesStore } from "@/stores/saved-cities.store";
+import { useGeolocation } from "@vueuse/core";
 
 const store = useSavedCitiesStore();
 
@@ -13,6 +14,15 @@ const options = [
     { value: "°C", text: "Celsius" },
     { value: "°F", text: "Fahrenheit" },
 ];
+const geolocation = useGeolocation();
+watch((geolocation.coords), () => {
+    if (geolocation.coords.value.latitude === undefined || geolocation.coords.value.longitude === undefined) return;
+    store.addCity({
+        name: "Your current location",
+        lat: geolocation.coords.value.latitude ?? 0,
+        lng: geolocation.coords.value.longitude ?? 0,
+    });
+});
 
 watch(
     () => selectedUnit.value,
@@ -43,6 +53,9 @@ watch(
                 :tempUnit="selectedUnit"
             />
         </Suspense>
+        <div v-if="store.cities.length === 0">
+            <p class="no-city-placeholder">No cities added yet. Search for a city to add it to your dashboard.</p>
+        </div>
     </div>
 </template>
 
@@ -56,5 +69,9 @@ watch(
     justify-content: center;
     flex-direction: column;
     align-items: center;
+}
+
+.no-city-placeholder {
+    margin-top: 10px;
 }
 </style>
